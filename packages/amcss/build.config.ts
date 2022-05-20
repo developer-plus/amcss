@@ -1,3 +1,4 @@
+import { resolve } from 'path'
 import { defineBuildConfig } from 'unbuild'
 
 export default defineBuildConfig({
@@ -9,5 +10,8 @@ export default defineBuildConfig({
     dts: {
       respectExternal: false
     }
+  },
+  alias: {
+    '@': resolve(__dirname, 'src')
   }
 })
