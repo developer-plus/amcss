@@ -46,3 +46,5 @@ export interface AmClass<T extends BasicObject> {
    */
   extension?: T
 }
+
+export * from './plugin'
