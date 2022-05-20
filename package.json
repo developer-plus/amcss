@@ -1,19 +1,20 @@
 {
-  "name": "pkg-name",
+  "name": "amcss-monorepo",
+  "private": true,
   "type": "module",
   "version": "0.0.0",
   "packageManager": "pnpm@7.1.0",
   "description": "",
   "keywords": [],
-  "homepage": "https://github.com/developer-plus/pkg-name#readme",
+  "homepage": "https://github.com/developer-plus/amcss#readme",
   "bugs": {
-    "url": "https://github.com/developer-plus/pkg-name/issues"
+    "url": "https://github.com/developer-plus/amcss/issues"
   },
   "license": "MIT",
   "author": "developer-plus",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/developer-plus/pkg-name.git"
+    "url": "git+https://github.com/developer-plus/amcss.git"
   },
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -21,7 +22,7 @@
   "exports": {
     ".": {
       "require": "./dist/index.cjs",
-      "import": "./dist/index.js",
+      "import": "./dist/index.mjs",
       "types": "./dist/index.d.ts"
     }
   },
@@ -38,8 +39,8 @@
   ],
   "sideEffects": false,
   "scripts": {
-    "dev": "tsup --watch",
-    "build": "tsup",
+    "stub": "pnpm -r stub",
+    "build": "pnpm -r build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prepublishOnly": "pnpm build",
@@ -58,8 +59,8 @@
     "husky": "^8.0.1",
     "lint-staged": "^12.4.1",
     "pnpm": "^7.1.0",
-    "tsup": "^5.12.7",
     "typescript": "^4.6.4",
+    "unbuild": "^0.7.4",
     "unplugin-auto-import": "^0.7.1",
     "vitest": "^0.12.6"
   },
