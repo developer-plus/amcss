@@ -1,7 +1,7 @@
 # amcss
 
-a minimalistic atomic css framework
+A minimalistic atomic css framework.
 
 ## LICENSE
 
-[MIT](./LICENSE) , made with 💗 .
+MIT, developer-plus made with 💗.
