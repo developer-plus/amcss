@@ -1,6 +1,6 @@
-# starter-ts
+# amcss
 
-A ts starter by developer-plus.
+a minimalistic atomic css framework
 
 ## LICENSE
 
