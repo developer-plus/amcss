@@ -1,7 +1,7 @@
 import type { AmClass, AmNode, BasicObject } from '@/types'
 
-export type Scanner<T extends BasicObject = {}> = (code: string) => AmClass<T>
-export type Compiler<T extends BasicObject = {}, N extends BasicObject = {}> = (code: AmClass<T>) => AmNode<T, N>
+export type Scanner<T extends BasicObject = {}> = (code: string) => AmClass<T>[]
+export type Compiler<T extends BasicObject = {}, N extends BasicObject = {}> = (code: AmClass<T>) => AmNode<T, N>[]
 export type Generator<T extends BasicObject = {}, N extends BasicObject = {}> = (amNode: AmNode<T, N>) => string
 
 // createPlugin

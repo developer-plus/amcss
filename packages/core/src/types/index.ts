@@ -1,7 +1,7 @@
 export type BasicObject = Record<string | number | symbol, unknown>
 
 // 编译器
-export interface AmNode<T extends BasicObject, N extends BasicObject>
+export interface AmNode<T extends BasicObject = {}, N extends BasicObject = {}>
   extends AmClass<T> {
   /**
    * @description: cssStyleObject { width: '10px', ... }
@@ -15,7 +15,7 @@ export interface AmNode<T extends BasicObject, N extends BasicObject>
 }
 
 // 扫描器
-export interface AmClass<T extends BasicObject> {
+export interface AmClass<T extends BasicObject = {}> {
   /**
    * @description 完整的 class 名称
    */
@@ -46,5 +46,12 @@ export interface AmClass<T extends BasicObject> {
    */
   extension?: T
 }
+
+export type PresetsRules = PresetsRulesString | PresetsRulesReg
+export type PresetsRulesString = [string, (isNotUnit: boolean) => any]
+export type PresetsRulesReg = [
+  RegExp,
+  (exec: RegExpExecArray, isNotUnit: boolean) => any
+]
 
 export * from './plugin'

@@ -5,21 +5,21 @@ describe('createPlugin', () => {
     const plugin = createPlugin({
       name: 'test',
       scanner: () => {
-        return {
+        return [{
           className: 'test',
           pureName: 'test',
           pid: 'test'
-        }
+        }]
       },
       compiler: () => {
-        return {
+        return [{
           className: 'test',
           pureName: 'test',
           pid: 'test',
           attrs: {
             width: '100px'
           }
-        }
+        }]
       },
       generator: () => {
         return 'test'
