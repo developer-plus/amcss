@@ -1,8 +1,8 @@
 {
-  "name": "amcss-core",
+  "name": "amcss-runtime",
   "type": "module",
   "version": "0.0.0",
-  "description": "amcss-core is an",
+  "description": "amcss-runtime",
   "keywords": [],
   "homepage": "https://github.com/developer-plus/amcss#readme",
   "bugs": {

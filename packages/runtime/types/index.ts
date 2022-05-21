@@ -27,7 +27,7 @@ export interface AmClass<T extends BasicObject = {}> {
   prefix?: string
 
   /**
-   * @description class 后缀 hover:bg-red/1 -> 1
+   * @description class 后缀 w-full/3 -> 33%
    */
   suffix?: string
 
@@ -47,11 +47,6 @@ export interface AmClass<T extends BasicObject = {}> {
   extension?: T
 }
 
-export type PresetsRules = PresetsRulesString | PresetsRulesReg
-export type PresetsRulesString = [string, (isNotUnit: boolean) => any]
-export type PresetsRulesReg = [
-  RegExp,
-  (exec: RegExpExecArray, isNotUnit: boolean) => any
-]
-
 export * from './plugin'
+export * from './context'
+export * from './presets'
