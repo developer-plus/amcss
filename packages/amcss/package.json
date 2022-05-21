@@ -42,7 +42,7 @@
     "build": "unbuild"
   },
   "dependencies": {
-    "amcss-core": "workspace:^0.0.0"
+    "amcss-runtime": "workspace:*"
   },
   "devDependencies": {
     "unbuild": "^0.7.4"
