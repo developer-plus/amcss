@@ -36,14 +36,14 @@ importers:
 
   packages/amcss:
     specifiers:
-      amcss-core: workspace:^0.0.0
+      amcss-runtime: workspace:*
       unbuild: ^0.7.4
     dependencies:
-      amcss-core: link:../core
+      amcss-runtime: link:../runtime
     devDependencies:
       unbuild: 0.7.4
 
-  packages/core:
+  packages/runtime:
     specifiers:
       unbuild: ^0.7.4
     devDependencies:
