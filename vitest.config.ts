@@ -8,6 +8,6 @@ export default defineConfig({
     })
   ],
   test: {
-    includeSource: ['packages/*']
+    includeSource: ['packages/**/*']
   }
 })
