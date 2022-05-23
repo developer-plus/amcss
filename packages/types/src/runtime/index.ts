@@ -7,7 +7,7 @@ export interface AmNode<T extends BasicObject = {}, N extends BasicObject = {}>
    * css 的样式对象，key 需要符合 kebab-case
    * @example { width: "10px", height: "10px" }
    */
-  styleObject: Record<string, string>
+  cssObject: Record<string, string>
 
   /**
    * @description: 允许插件在其配置中添加自己想要的配置
@@ -24,8 +24,7 @@ export interface AmClass<T extends BasicObject = {}> {
   origin: string
 
   /**
-   * 伪类、媒体查询、暗色模式等
-   * @example "hover:", "xl:", "dark:"
+   * 注解，包含伪类、媒体查询、暗色模式
    */
   annotation: AmAnnotation
 
@@ -49,6 +48,8 @@ export interface AmClass<T extends BasicObject = {}> {
 export interface AmAnnotation {
   /**
    * 伪类
+   * @enum "hover" | "active" | ...
+   * @default []
    */
   pseudo: string[]
   /**
@@ -57,7 +58,9 @@ export interface AmAnnotation {
    */
   dark: boolean
   /**
-   * 媒体查询
+   * 媒体查询分割点
+   * @enum "sm" | "md" | "lg" | "xl" | "2xl"
+   * @default []
    */
   breakpoints: string[]
 }
