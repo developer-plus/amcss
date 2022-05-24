@@ -45,11 +45,10 @@ importers:
 
   packages/runtime:
     specifiers:
-      '@amcss/types': workspace:^0.0.0
+      '@amcss/types': workspace:*
       unbuild: ^0.7.4
-    dependencies:
-      '@amcss/types': link:../types
     devDependencies:
+      '@amcss/types': link:../types
       unbuild: 0.7.4
 
   packages/transformer:
