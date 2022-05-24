@@ -1,7 +1,8 @@
+import type { AmClass, AmNode } from '@amcss/types'
 import { ContextScheduler } from './scheduler'
 import type { DefaultPlugin } from '~/mock/DefaultPlugin'
 import { createDefaultPlugin } from '~/mock/DefaultPlugin'
-import type { AmClass, AmNode, PluginOptions, PresetsRules } from '~/types'
+import type { PluginOptions, PresetsRules } from '~/types'
 
 interface ContextOptions {
   preset?: PresetsRules[]
