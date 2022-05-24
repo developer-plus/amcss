@@ -9,7 +9,7 @@ export default defineConfig({
     })
   ],
   test: {
-    includeSource: ['packages/**/*']
+    includeSource: ['packages/**/*', 'test/**/*']
   },
   alias: {
     runtime: resolve(__dirname, 'packages/runtime/')

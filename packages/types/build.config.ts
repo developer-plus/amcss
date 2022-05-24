@@ -14,6 +14,5 @@ export default defineBuildConfig({
   alias: {
     '@': resolve(__dirname, 'src'),
     '~': resolve(__dirname)
-  },
-  externals: ['@amcss/types']
+  }
 })

@@ -14,6 +14,7 @@ export class ContextScanner {
         this._ctx._code,
         unResolvedNames
       )
+
       unResolvedNames = unResolvedClassNames
       this.setAmClassMap(amClasses, scanner.pid!)
     })

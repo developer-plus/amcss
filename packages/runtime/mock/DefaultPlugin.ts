@@ -1,4 +1,5 @@
-import type { AmClass, AmNode, PresetsRules } from '~/types'
+import type { AmClass, AmNode } from '@amcss/types'
+import type { PresetsRules } from '~/types'
 
 export function createDefaultPlugin(
   preset: PresetsRules[] = [],
@@ -24,11 +25,24 @@ export class DefaultPlugin {
   }
 
   scanner(_: string) {
-    return {} as DefaultPluginScannerReturnValue
+    return {
+      amClasses: [],
+      unResolvedClassNames: new Set()
+    } as DefaultPluginScannerReturnValue
   }
 
   compiler(_: AmClass) {
-    return {} as AmNode
+    return {
+      pid: '112123',
+      cssObject: {},
+      origin: 'asd',
+      annotation: {
+        pseudo: [],
+        dark: true,
+        breakpoints: []
+      },
+      pure: ''
+    } as AmNode
   }
 
   generator(_: AmNode) {
