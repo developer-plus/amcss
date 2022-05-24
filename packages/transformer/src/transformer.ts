@@ -4,7 +4,7 @@ import {
   _darkMatcher,
   _pseudoMatcher,
   _pureMatcher
-} from './matcher/matchers'
+} from './matcher'
 
 export type TransFormerResult = Omit<AmNode, 'options' | 'pid' | 'extension'>
 
