@@ -1,4 +1,4 @@
-import type { AmClass, AmNode, BasicObject } from '~/types'
+import type { AmClass, AmNode, BasicObject } from '@amcss/types'
 
 export type Scanner<T extends BasicObject = {}> = ((
   /**
