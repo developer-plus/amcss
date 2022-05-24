@@ -55,8 +55,10 @@ importers:
 
   packages/transformer:
     specifiers:
+      '@amcss/types': workspace:*
       unbuild: ^0.7.4
     devDependencies:
+      '@amcss/types': link:../types
       unbuild: 0.7.4
 
   packages/types:
