@@ -9,11 +9,13 @@ export class ContextCompiler {
   constructor(public _ctx: Context) {}
   compilerHandler() {
     this.handleDefaultPluginCompile()
+    // 取所有的编译器
     this.compilerList.forEach((compiler) => {
-      const { pid: name } = compiler
-      const amNodeSet = (this._ctx._AmNodeMap[name!]
-        = this._ctx._AmNodeMap[name!] || [])
-      const amClassSet = this._ctx._AmClassMap[name!] || []
+      const { pid } = compiler
+      // 根据插件id拿到编译器的amnode列表
+      const amNodeSet = (this._ctx._AmNodeMap[pid!]
+        = this._ctx._AmNodeMap[pid!] || [])
+      const amClassSet = this._ctx._AmClassMap[pid!] || []
       amClassSet.forEach((amClass) => {
         const amNodeCache = this._AmNodeCache.get(amClass.origin)
         if (amNodeCache) {
@@ -34,11 +36,10 @@ export class ContextCompiler {
     const amNodeSet = (this._ctx._AmNodeMap[DefaultName]
       = this._ctx._AmNodeMap[DefaultName] || [])
     amClasses.forEach((amClass) => {
-      const amNodeCache = this._AmNodeCache.get(amClass.origin)
+      let amNodeCache = this._AmNodeCache.get(amClass.origin)
       if (!amNodeCache) {
-        const amNode = this._ctx.defaultPlugin.compiler(amClass)
-        this._AmNodeCache.set(amClass.origin, amNode)
-        amNodeSet.push(amNode)
+        amNodeCache = this._ctx.defaultPlugin.compiler(amClass)
+        this._AmNodeCache.set(amClass.origin, amNodeCache!)
         return
       }
       amNodeSet.push(amNodeCache)

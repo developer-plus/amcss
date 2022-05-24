@@ -8,8 +8,8 @@ export class ContextGenerator {
   generatorHandler() {
     this.handleDefaultPluginGenerator()
     this.generatorList.forEach((generator) => {
-      const { pid: name } = generator
-      const amNodeSet = this._ctx._AmNodeMap[name!]
+      const { pid } = generator
+      const amNodeSet = this._ctx._AmNodeMap[pid!]
       amNodeSet.forEach((amNode) => {
         this._ctx.css += generator(amNode)
       })
