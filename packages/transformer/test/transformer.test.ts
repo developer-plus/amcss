@@ -1,4 +1,4 @@
-import { checkCss, checkPseudo, transformer } from '../src/transformer'
+import { checkAnnotation, checkPure, transformer } from '../src/transformer'
 
 describe('transformer', () => {
   it('transformer', () => {
@@ -8,55 +8,70 @@ describe('transformer', () => {
 
     expect(transformer(c1)).toMatchInlineSnapshot(`
       {
-        "pseudo": [
-          "hover",
-          "active",
-        ],
-        "pure": "bg-red",
-        "suffix": "1",
+        "annotation": {
+          "breakpoints": [],
+          "dark": false,
+          "pseudo": [
+            "hover",
+            "active",
+          ],
+        },
+        "cssObject": {},
+        "origin": "hover:active:bg-red/1",
+        "pure": "bg-red/1",
       }
     `)
     expect(transformer(c2)).toMatchInlineSnapshot(`
       {
+        "annotation": {
+          "breakpoints": [],
+          "dark": false,
+          "pseudo": [],
+        },
+        "cssObject": {},
+        "origin": "bg-red",
         "pure": "bg-red",
       }
     `)
-    expect(transformer(c3)).toMatchInlineSnapshot(`
-      {
-        "pure": "bg-red",
-      }
-    `)
+    expect(transformer(c3)).toMatchInlineSnapshot('null')
   })
 
-  it('checkPseudo', () => {
-    const p1 = 'hover:active:'
+  it('checkAnnotation', () => {
+    const p1 = 'hover:active:dark:xl:'
     const p2 = 'aaa:bbb:'
     const p3 = 'hover:aaa:'
 
-    expect(checkPseudo(p1)).toMatchInlineSnapshot(`
+    expect(checkAnnotation(p1)).toMatchInlineSnapshot(`
       {
-        "pseudo": [
-          "hover",
-          "active",
-        ],
+        "annotation": {
+          "breakpoints": [
+            "xl",
+          ],
+          "dark": true,
+          "pseudo": [
+            "hover",
+            "active",
+          ],
+        },
       }
     `)
-    expect(checkPseudo(p2)).toMatchInlineSnapshot('null')
-    expect(checkPseudo(p3)).toMatchInlineSnapshot('null')
+    expect(checkAnnotation(p2)).toMatchInlineSnapshot('null')
+    expect(checkAnnotation(p3)).toMatchInlineSnapshot('null')
   })
 
-  it('checkCss', () => {
+  it('checkPure', () => {
     const c1 = 'bg-red/1'
     const c2 = 'bg-red'
 
-    expect(checkCss(c1)).toMatchInlineSnapshot(`
+    expect(checkPure(c1)).toMatchInlineSnapshot(`
       {
-        "pure": "bg-red",
-        "suffix": "1",
+        "cssObject": {},
+        "pure": "bg-red/1",
       }
     `)
-    expect(checkCss(c2)).toMatchInlineSnapshot(`
+    expect(checkPure(c2)).toMatchInlineSnapshot(`
       {
+        "cssObject": {},
         "pure": "bg-red",
       }
     `)

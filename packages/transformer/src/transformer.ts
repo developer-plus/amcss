@@ -1,85 +1,107 @@
-import { createMatcher } from './matcher'
-import { CssRE, PseudoClassesRE } from './re'
-import { isFullyMatched } from './utils'
+import type { AmNode, Nullable } from '@amcss/types'
+import {
+  _breakpointsMatcher,
+  _darkMatcher,
+  _pseudoMatcher,
+  _pureMatcher
+} from './matcher/matchers'
 
-export interface PseudoResult {
-  pseudo?: string[]
-}
+export type TransFormerResult = Omit<AmNode, 'options' | 'pid' | 'extension'>
 
-export interface CssResult {
-  pure: string
-  suffix?: string
-}
+export type AnnotationResult = Pick<TransFormerResult, 'annotation'>
 
-export interface TransFormerResult extends PseudoResult, CssResult {}
+export type PureResult = Pick<TransFormerResult, 'pure' | 'cssObject'>
 
-export const pseudoMatcher = createMatcher('pseudo', PseudoClassesRE)
+const annotationRE = new RegExp(
+  `${_pseudoMatcher.re.source}|${_darkMatcher.re.source}|${_breakpointsMatcher.re.source}`,
+  'g'
+)
 
-export const checkPseudo = (pseudoStr: string) => {
-  const ret = pseudoMatcher.match(pseudoStr)
-
-  if (ret) {
-    const arr = Array.from(ret)
-
-    if (isFullyMatched(pseudoStr, ...arr)) {
-      return {
-        pseudo: arr.map(i => i.substring(0, i.length - 1))
-      }
+export const checkAnnotation = (
+  annotation: string
+): Nullable<AnnotationResult> => {
+  const ret: AnnotationResult = {
+    annotation: {
+      pseudo: [],
+      dark: false,
+      breakpoints: []
     }
+  }
+
+  if (annotation === '')
+    return ret
+
+  const matchRet = annotation.match(annotationRE)
+
+  if (matchRet === null)
+    return null
+
+  const arr = Array.from(matchRet)
+
+  // validate match result
+  if (annotation === `${arr.join(':')}:`) {
+    for (let i = 0; i < arr.length; i++) {
+      const r = arr[i]
+
+      if (_pseudoMatcher.validate(r))
+        ret.annotation.pseudo.push(r)
+      else if (_darkMatcher.validate(r))
+        ret.annotation.dark = true
+      else if (_breakpointsMatcher.validate(r))
+        ret.annotation.breakpoints.push(r)
+      else return null
+    }
+
+    return ret
   }
 
   return null
 }
 
-// todo correctly match css
-export const cssMatcher = createMatcher('css', CssRE)
+export const checkPure = (pure: string): PureResult | null => {
+  const matchRet = _pureMatcher.match(pure)
 
-export const checkCss = (cssStr: string) => {
-  const ret = cssMatcher.match(cssStr)
-
-  if (ret) {
-    const result: CssResult = {
-      pure: ret[1],
-      suffix: ret[2]
+  if (matchRet) {
+    const ret: PureResult = {
+      pure,
+      cssObject: {}
     }
 
-    if (isFullyMatched(cssStr, result.pure, result.suffix)) {
-      if (!result.suffix)
-        delete result.suffix
-      else result.suffix = result.suffix.substring(1)
+    // todo validate and pure2CssObject
+    return ret
 
-      return result
-    }
+    // validate error return null
   }
 
   return null
 }
 
-export const transformer = (classStr: string): TransFormerResult | null => {
-  let pseudoStr = ''
-  let cssStr = classStr
+export const transformer = (origin: string): TransFormerResult | null => {
+  let annotationStr = ''
+  let pureStr = origin
 
   // todo correctly split classStr
   // split classStr
-  if (classStr.includes(':')) {
-    const pIndex = classStr.lastIndexOf(':')
-    pseudoStr = classStr.substring(0, pIndex + 1)
-    cssStr = classStr.substring(pIndex + 1)
+  if (origin.includes(':')) {
+    const pIndex = origin.lastIndexOf(':')
+    annotationStr = origin.substring(0, pIndex + 1)
+    pureStr = origin.substring(pIndex + 1)
   }
 
-  // pure and suffix
-  const cssRet = checkCss(cssStr)
+  // pure
+  const pureRet = checkPure(pureStr)
 
-  if (cssRet === null)
+  if (pureRet === null)
     return null
 
-  const ret: TransFormerResult | null = cssRet
+  const annotationRet = checkAnnotation(annotationStr)
 
-  // pseudo
-  const pseudoRet = checkPseudo(pseudoStr)
+  if (annotationRet === null)
+    return null
 
-  if (pseudoRet)
-    ret.pseudo = pseudoRet.pseudo
-
-  return ret
+  return {
+    origin,
+    ...pureRet,
+    ...annotationRet
+  }
 }
