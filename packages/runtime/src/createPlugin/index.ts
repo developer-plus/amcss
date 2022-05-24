@@ -1,4 +1,5 @@
-import type { BasicObject, PluginOptions } from '~/types'
+import type { BasicObject } from '@amcss/types'
+import type { PluginOptions } from '~/types'
 
 export function createPlugin<
   T extends BasicObject = {},

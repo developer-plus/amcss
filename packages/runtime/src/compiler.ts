@@ -22,7 +22,7 @@ export class ContextCompiler {
         }
         const amNodes = compiler(amClass)
         amNodes.forEach((amNode) => {
-          this._AmNodeCache.set(amNode.className, amNode)
+          this._AmNodeCache.set(amNode.origin, amNode)
           amNodeSet.push(amNode)
         })
       })

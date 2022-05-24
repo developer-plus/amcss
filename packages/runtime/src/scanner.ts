@@ -1,3 +1,4 @@
+import type { AmClass } from '@amcss/types'
 import type { Context } from './context'
 import { DefaultName } from './context'
 import type { Scanner } from '~/types'
@@ -14,30 +15,26 @@ export class ContextScanner {
         unResolvedNames
       )
       unResolvedNames = unResolvedClassNames
-      amClasses.forEach((amClass) => {
-        if (!this.classNameSet.has(amClass.className)) {
-          if (this._ctx._AmClassMap[scanner.pid!])
-            this._ctx._AmClassMap[scanner.pid!].push(amClass)
-          else this._ctx._AmClassMap[scanner.pid!] = [amClass]
-
-          this.classNameSet.add(amClass.className)
-        }
-      })
+      this.setAmClassMap(amClasses, scanner.pid!)
     })
   }
 
   handleDefaultPluginScanner(code: string) {
     const { amClasses, unResolvedClassNames }
       = this._ctx.defaultPlugin.scanner(code)
+    this.setAmClassMap(amClasses, DefaultName)
+    return unResolvedClassNames
+  }
+
+  setAmClassMap(amClasses: AmClass[], key: symbol) {
     amClasses.forEach((amClass) => {
-      if (!this.classNameSet.has(amClass.className)) {
-        if (this._ctx._AmClassMap[DefaultName])
-          this._ctx._AmClassMap[DefaultName].push(amClass)
-        else this._ctx._AmClassMap[DefaultName] = [amClass]
-        this.classNameSet.add(amClass.className)
+      if (!this.classNameSet.has(amClass.origin)) {
+        const amClassMap = (this._ctx._AmClassMap[key]
+          = this._ctx._AmClassMap[key] || [])
+        amClassMap.push(amClass)
+        this.classNameSet.add(amClass.origin)
       }
     })
-    return unResolvedClassNames
   }
 
   reset() {}
