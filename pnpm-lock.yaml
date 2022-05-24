@@ -4,6 +4,7 @@ importers:
 
   .:
     specifiers:
+      '@amcss/runtime': workspace:*
       '@commitlint/cli': ^17.0.0
       '@commitlint/config-conventional': ^17.0.0
       '@developer-plus/eslint-config': ^0.1.0
@@ -19,6 +20,7 @@ importers:
       unplugin-auto-import: ^0.7.1
       vitest: ^0.12.6
     devDependencies:
+      '@amcss/runtime': link:packages/runtime
       '@commitlint/cli': 17.0.0
       '@commitlint/config-conventional': 17.0.0
       '@developer-plus/eslint-config': 0.1.1_hcfsmds2fshutdssjqluwm76uu
