@@ -38,10 +38,10 @@ importers:
 
   packages/amcss:
     specifiers:
-      amcss-runtime: workspace:*
+      '@amcss/runtime': workspace:*
       unbuild: ^0.7.4
     dependencies:
-      amcss-runtime: link:../runtime
+      '@amcss/runtime': link:../runtime
     devDependencies:
       unbuild: 0.7.4
 
@@ -55,8 +55,10 @@ importers:
 
   packages/transformer:
     specifiers:
+      '@amcss/types': workspace:*
       unbuild: ^0.7.4
     devDependencies:
+      '@amcss/types': link:../types
       unbuild: 0.7.4
 
   packages/types:
