@@ -29,7 +29,7 @@ export class DefaultPlugin {
     const unResolvedClassNames: Set<string> = new Set<string>()
     const classSet: Set<string> = new Set<string>()
     const amClassMap = new Map<string, AmClass | null>()
-    // 扫描code
+    // 扫描 code
     const matches = [...code.matchAll(ClassNameReg)]
     const contents = matches.flatMap(match =>
       match[0].replace(END_OF_LINE, ' ').split(AtleastOneSpaceReg)
