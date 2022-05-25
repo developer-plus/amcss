@@ -45,6 +45,12 @@ importers:
     devDependencies:
       unbuild: 0.7.4
 
+  packages/default-plugin:
+    specifiers:
+      unbuild: ^0.7.4
+    devDependencies:
+      unbuild: 0.7.4
+
   packages/runtime:
     specifiers:
       '@amcss/types': workspace:*
