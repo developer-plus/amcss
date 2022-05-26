@@ -38,15 +38,14 @@ export class DefaultPlugin {
     // 去除上次解析结果
     this._clearContent()
     // 提取容器
-    const { shortcuts, amClassMap, unResolvedClassNames, amClasses, classSet }
-      = this
+    const { amClassMap, unResolvedClassNames, amClasses, classSet } = this
     // 扫描 code
     const matches = [...code.matchAll(ClassNameReg)]
     const contents = matches.flatMap(match =>
       match[0].replace(END_OF_LINE, SPACE_STRING).split(AtleastOneSpaceReg)
     )
     // 产生
-    contents.forEach(content => this._contentHandler(content, shortcuts))
+    contents.forEach(content => this._contentHandler(content))
     classSet.forEach(value => amClasses.push(createAmClass(value, amClassMap)))
 
     return {
@@ -55,19 +54,21 @@ export class DefaultPlugin {
     } as DefaultPluginScannerReturnValue
   }
 
-  _contentHandler(content: string, shortcuts: Record<string, string> = {}) {
+  _contentHandler(content: string) {
     // FIXME: should fix shortcuts reference itself recursively
+    const { shortcuts, amClassMap, unResolvedClassNames, classSet } = this
+
     const resolveTransformed = transformer(content)
     if (resolveTransformed) {
-      this.classSet.add(content)
-      this.amClassMap.set(content, { ...resolveTransformed, pid: 'Default' })
+      classSet.add(content)
+      amClassMap.set(content, { ...resolveTransformed, pid: 'Default' })
     }
     else if (shortcuts[content]) {
       const contents = shortcuts[content].split(AtleastOneSpaceReg)
-      contents.forEach(content => this._contentHandler(content, shortcuts))
+      contents.forEach(content => this._contentHandler(content))
     }
     else {
-      this.unResolvedClassNames.add(content)
+      unResolvedClassNames.add(content)
     }
   }
 
