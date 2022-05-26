@@ -5,6 +5,8 @@ importers:
   .:
     specifiers:
       '@amcss/runtime': workspace:*
+      '@amcss/transformer': workspace:*
+      '@amcss/types': workspace:*
       '@commitlint/cli': ^17.0.0
       '@commitlint/config-conventional': ^17.0.0
       '@developer-plus/eslint-config': ^0.1.0
@@ -21,6 +23,8 @@ importers:
       vitest: ^0.12.6
     devDependencies:
       '@amcss/runtime': link:packages/runtime
+      '@amcss/transformer': link:packages/transformer
+      '@amcss/types': link:packages/types
       '@commitlint/cli': 17.0.0
       '@commitlint/config-conventional': 17.0.0
       '@developer-plus/eslint-config': 0.1.1_hcfsmds2fshutdssjqluwm76uu
@@ -47,8 +51,12 @@ importers:
 
   packages/default-plugin:
     specifiers:
+      '@amcss/transformer': workspace:*
+      '@amcss/types': workspace:*
       unbuild: ^0.7.4
     devDependencies:
+      '@amcss/transformer': link:../transformer
+      '@amcss/types': link:../types
       unbuild: 0.7.4
 
   packages/runtime:

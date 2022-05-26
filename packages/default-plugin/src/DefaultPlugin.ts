@@ -1,6 +1,6 @@
-import type { AmClass } from '../../types/src/runtime'
-import type { PresetsRules } from '../../runtime/types'
-import { transformer } from '../../transformer/src/transformer'
+import type { AmClass } from '@amcss/types'
+import type { TransFormerResult } from '@amcss/transformer'
+import { transformer } from '@amcss/transformer'
 import {
   AtleastOneSpaceReg,
   ClassNameReg,
@@ -9,7 +9,7 @@ import {
 } from './re'
 
 export function createDefaultPlugin(
-  preset: PresetsRules[] = [],
+  preset: any[] = [],
   shortcuts: Record<string, string> = {}
 ) {
   return new DefaultPlugin(preset, shortcuts)
@@ -30,7 +30,7 @@ export class DefaultPlugin {
   private amClassMap = new Map<string, AmClass | null>()
 
   constructor(
-    private preset: PresetsRules[],
+    private preset: any[],
     private shortcuts: Record<string, string>
   ) {}
 
@@ -59,7 +59,16 @@ export class DefaultPlugin {
     const { shortcuts } = this
     const shortcut = shortcuts[content]
 
-    const resolveTransformed = transformer(content)
+    let resolveTransformed = transformer(content)
+    // todo 得删除
+    if (
+      resolveTransformed
+      && (resolveTransformed.origin === 'tick-heart'
+        || resolveTransformed.origin === 'hbs'
+        || resolveTransformed.origin === 'zx')
+    )
+      resolveTransformed = null
+
     if (resolveTransformed)
       this._identifiedProcessing(content, resolveTransformed)
     else if (shortcut)
@@ -83,8 +92,10 @@ export class DefaultPlugin {
     unResolvedClassNames.add(content)
   }
 
-  // todo resolveTransformed 类型有问题需要 Transformer 处理
-  private _identifiedProcessing(content: string, resolveTransformed: any) {
+  private _identifiedProcessing(
+    content: string,
+    resolveTransformed: TransFormerResult
+  ) {
     const { amClassMap, classSet } = this
     classSet.add(content)
     amClassMap.set(content, { ...resolveTransformed, pid: 'Default' })
