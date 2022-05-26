@@ -24,18 +24,29 @@ export class DefaultPlugin {
   ) {}
 
   scanner(code: string) {
+    // 创建容器
     const amClasses: AmClass[] = []
     const unResolvedClassNames: Set<string> = new Set<string>()
     const classSet: Set<string> = new Set<string>()
+    const amClassMap = new Map<string, AmClass | null>()
+    // 扫描 code
     const matches = [...code.matchAll(ClassNameReg)]
-    const contents = matches.flatMap(match => match[0].replace(END_OF_LINE, ' ').split(AtleastOneSpaceReg))
-    contents.forEach(content => contentHandler(content, this.shortcuts))
-    classSet.forEach(value => amClasses.push(createAmClass(value)))
+    const contents = matches.flatMap(match =>
+      match[0].replace(END_OF_LINE, ' ').split(AtleastOneSpaceReg)
+    )
 
-    function contentHandler(content: string, shortcuts: Record<string, string> = {}) {
+    contents.forEach(content => contentHandler(content, this.shortcuts))
+    classSet.forEach(value => amClasses.push(createAmClass(value, amClassMap)))
+
+    function contentHandler(
+      content: string,
+      shortcuts: Record<string, string> = {}
+    ) {
       // FIXME: should fix shortcuts reference itself recursively
-      if (transformer(content)) {
+      const resolveTransformed = transformer(content)
+      if (resolveTransformed) {
         classSet.add(content)
+        amClassMap.set(content, { ...resolveTransformed, pid: 'Default' })
       }
       else if (shortcuts[content]) {
         const contents = shortcuts[content].split(AtleastOneSpaceReg)
@@ -53,13 +64,12 @@ export class DefaultPlugin {
   }
 }
 
-export function createAmClass(origin: string) {
-  const annotation = transformer(origin)?.annotation
-  const pure = transformer(origin)?.pure
+export function createAmClass(
+  origin: string,
+  amClassMap: Map<string, AmClass | null>
+) {
+  const resolveTransformed = amClassMap.get(origin)
   return {
-    annotation,
-    origin,
-    pure,
-    pid: 'Default'
+    ...resolveTransformed
   } as AmClass
 }
