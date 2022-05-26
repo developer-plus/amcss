@@ -56,26 +56,39 @@ export class DefaultPlugin {
 
   _contentHandler(content: string) {
     // FIXME: should fix shortcuts reference itself recursively
-    const { shortcuts, amClassMap, unResolvedClassNames, classSet } = this
+    const { shortcuts } = this
+    const shortcut = shortcuts[content]
 
     const resolveTransformed = transformer(content)
-    if (resolveTransformed) {
-      classSet.add(content)
-      amClassMap.set(content, { ...resolveTransformed, pid: 'Default' })
-    }
-    else if (shortcuts[content]) {
-      const contents = shortcuts[content].split(AtleastOneSpaceReg)
-      contents.forEach(content => this._contentHandler(content))
-    }
-    else {
-      unResolvedClassNames.add(content)
-    }
+    if (resolveTransformed)
+      this._identifiedProcessing(content, resolveTransformed)
+    else if (shortcut)
+      this._scannerSplitShortcut(shortcut)
+    else
+      this._processingNotRecognized(content)
   }
 
   _clearContent() {
     this.amClasses.length = 0
     this.unResolvedClassNames.clear()
     this.classSet.clear()
+  }
+
+  _scannerSplitShortcut(shortcut: string) {
+    const contents = shortcut.split(AtleastOneSpaceReg)
+    contents.forEach(content => this._contentHandler(content))
+  }
+
+  _processingNotRecognized(content: string) {
+    const { unResolvedClassNames } = this
+    unResolvedClassNames.add(content)
+  }
+
+  // todo resolveTransformed 类型有问题需要 Transformer 处理
+  _identifiedProcessing(content: string, resolveTransformed: any) {
+    const { amClassMap, classSet } = this
+    classSet.add(content)
+    amClassMap.set(content, { ...resolveTransformed, pid: 'Default' })
   }
 }
 
