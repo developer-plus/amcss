@@ -42,6 +42,8 @@
     "build": "unbuild"
   },
   "devDependencies": {
+    "@amcss/transformer": "workspace:*",
+    "@amcss/types": "workspace:*",
     "unbuild": "^0.7.4"
   }
 }

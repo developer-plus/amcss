@@ -14,3 +14,4 @@ export const ClassNameReg = new RegExp(
 )
 export const AtleastOneSpaceReg = /\s+/
 export const END_OF_LINE = '\n'
+export const SPACE_STRING = ' '

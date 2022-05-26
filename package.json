@@ -52,6 +52,8 @@
   },
   "devDependencies": {
     "@amcss/runtime": "workspace:*",
+    "@amcss/transformer": "workspace:*",
+    "@amcss/types": "workspace:*",
     "@commitlint/cli": "^17.0.0",
     "@commitlint/config-conventional": "^17.0.0",
     "@developer-plus/eslint-config": "^0.1.0",
