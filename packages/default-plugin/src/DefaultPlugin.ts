@@ -1,7 +1,12 @@
 import type { AmClass } from '../../types/src/runtime'
 import type { PresetsRules } from '../../runtime/types'
 import { transformer } from '../../transformer/src/transformer'
-import { AtleastOneSpaceReg, ClassNameReg, END_OF_LINE } from './re'
+import {
+  AtleastOneSpaceReg,
+  ClassNameReg,
+  END_OF_LINE,
+  SPACE_STRING
+} from './re'
 
 export function createDefaultPlugin(
   preset: PresetsRules[] = [],
@@ -18,49 +23,58 @@ interface DefaultPluginScannerReturnValue {
 }
 
 export class DefaultPlugin {
+  // 创建容器
+  amClasses: AmClass[] = []
+  unResolvedClassNames: Set<string> = new Set<string>()
+  classSet: Set<string> = new Set<string>()
+  amClassMap = new Map<string, AmClass | null>()
+
   constructor(
     private preset: PresetsRules[],
     private shortcuts: Record<string, string>
   ) {}
 
   scanner(code: string) {
-    // 创建容器
-    const amClasses: AmClass[] = []
-    const unResolvedClassNames: Set<string> = new Set<string>()
-    const classSet: Set<string> = new Set<string>()
-    const amClassMap = new Map<string, AmClass | null>()
+    // 去除上次解析结果
+    this._clearContent()
+    // 提取容器
+    const { shortcuts, amClassMap, unResolvedClassNames, amClasses, classSet }
+      = this
     // 扫描 code
     const matches = [...code.matchAll(ClassNameReg)]
     const contents = matches.flatMap(match =>
-      match[0].replace(END_OF_LINE, ' ').split(AtleastOneSpaceReg)
+      match[0].replace(END_OF_LINE, SPACE_STRING).split(AtleastOneSpaceReg)
     )
-
-    contents.forEach(content => contentHandler(content, this.shortcuts))
+    // 产生
+    contents.forEach(content => this._contentHandler(content, shortcuts))
     classSet.forEach(value => amClasses.push(createAmClass(value, amClassMap)))
-
-    function contentHandler(
-      content: string,
-      shortcuts: Record<string, string> = {}
-    ) {
-      // FIXME: should fix shortcuts reference itself recursively
-      const resolveTransformed = transformer(content)
-      if (resolveTransformed) {
-        classSet.add(content)
-        amClassMap.set(content, { ...resolveTransformed, pid: 'Default' })
-      }
-      else if (shortcuts[content]) {
-        const contents = shortcuts[content].split(AtleastOneSpaceReg)
-        contents.forEach(content => contentHandler(content, shortcuts))
-      }
-      else {
-        unResolvedClassNames.add(content)
-      }
-    }
 
     return {
       amClasses,
       unResolvedClassNames
     } as DefaultPluginScannerReturnValue
+  }
+
+  _contentHandler(content: string, shortcuts: Record<string, string> = {}) {
+    // FIXME: should fix shortcuts reference itself recursively
+    const resolveTransformed = transformer(content)
+    if (resolveTransformed) {
+      this.classSet.add(content)
+      this.amClassMap.set(content, { ...resolveTransformed, pid: 'Default' })
+    }
+    else if (shortcuts[content]) {
+      const contents = shortcuts[content].split(AtleastOneSpaceReg)
+      contents.forEach(content => this._contentHandler(content, shortcuts))
+    }
+    else {
+      this.unResolvedClassNames.add(content)
+    }
+  }
+
+  _clearContent() {
+    this.amClasses.length = 0
+    this.unResolvedClassNames.clear()
+    this.classSet.clear()
   }
 }
 
