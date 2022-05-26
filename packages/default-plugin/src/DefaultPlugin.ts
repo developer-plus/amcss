@@ -59,15 +59,7 @@ export class DefaultPlugin {
     const { shortcuts } = this
     const shortcut = shortcuts[content]
 
-    let resolveTransformed = transformer(content)
-    // todo 得删除
-    if (
-      resolveTransformed
-      && (resolveTransformed.origin === 'tick-heart'
-        || resolveTransformed.origin === 'hbs'
-        || resolveTransformed.origin === 'zx')
-    )
-      resolveTransformed = null
+    const resolveTransformed = transformer(content)
 
     if (resolveTransformed)
       this._identifiedProcessing(content, resolveTransformed)

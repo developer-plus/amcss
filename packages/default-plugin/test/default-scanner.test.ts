@@ -1,5 +1,6 @@
-import * as transformer from '../../transformer/src/transformer'
+import * as transformer from '@amcss/transformer'
 import { createDefaultPlugin } from '../src/DefaultPlugin'
+// TODO: remove spyon when transfromer is right
 const rawTransformer = transformer.transformer
 const transformSpy = vi
   .spyOn(transformer, 'transformer')
@@ -9,38 +10,6 @@ const transformSpy = vi
     return rawTransformer(origin)
   })
 describe('default-scanner', () => {
-  it('should create AmClass', () => {
-    // const v1 = 'w-100'
-    // const v2 = 'hover:active:bg-black/1'
-    // expect(createAmClass(v1)).toMatchInlineSnapshot(`
-    //   {
-    //     "annotation": {
-    //       "breakpoints": [],
-    //       "dark": false,
-    //       "pseudo": [],
-    //     },
-    //     "origin": "w-100",
-    //     "pid": "Default",
-    //     "pure": "w-100",
-    //   }
-    // `)
-    // expect(createAmClass(v2)).toMatchInlineSnapshot(`
-    //   {
-    //     "annotation": {
-    //       "breakpoints": [],
-    //       "dark": false,
-    //       "pseudo": [
-    //         "hover",
-    //         "active",
-    //       ],
-    //     },
-    //     "origin": "hover:active:bg-black/1",
-    //     "pid": "Default",
-    //     "pure": "bg-black/1",
-    //   }
-    // `)
-  })
-
   it('should create AmClass from common class', () => {
     const code = '<div class="w-100">'
     const defaultPlugin = createDefaultPlugin()
