@@ -24,10 +24,10 @@ interface DefaultPluginScannerReturnValue {
 
 export class DefaultPlugin {
   // 创建容器
-  amClasses: AmClass[] = []
-  unResolvedClassNames: Set<string> = new Set<string>()
-  classSet: Set<string> = new Set<string>()
-  amClassMap = new Map<string, AmClass | null>()
+  private amClasses: AmClass[] = []
+  private unResolvedClassNames: Set<string> = new Set<string>()
+  private classSet: Set<string> = new Set<string>()
+  private amClassMap = new Map<string, AmClass | null>()
 
   constructor(
     private preset: PresetsRules[],
@@ -54,7 +54,7 @@ export class DefaultPlugin {
     } as DefaultPluginScannerReturnValue
   }
 
-  _contentHandler(content: string) {
+  private _contentHandler(content: string) {
     // FIXME: should fix shortcuts reference itself recursively
     const { shortcuts } = this
     const shortcut = shortcuts[content]
@@ -64,28 +64,27 @@ export class DefaultPlugin {
       this._identifiedProcessing(content, resolveTransformed)
     else if (shortcut)
       this._scannerSplitShortcut(shortcut)
-    else
-      this._processingNotRecognized(content)
+    else this._processingNotRecognized(content)
   }
 
-  _clearContent() {
+  private _clearContent() {
     this.amClasses.length = 0
     this.unResolvedClassNames.clear()
     this.classSet.clear()
   }
 
-  _scannerSplitShortcut(shortcut: string) {
+  private _scannerSplitShortcut(shortcut: string) {
     const contents = shortcut.split(AtleastOneSpaceReg)
     contents.forEach(content => this._contentHandler(content))
   }
 
-  _processingNotRecognized(content: string) {
+  private _processingNotRecognized(content: string) {
     const { unResolvedClassNames } = this
     unResolvedClassNames.add(content)
   }
 
   // todo resolveTransformed 类型有问题需要 Transformer 处理
-  _identifiedProcessing(content: string, resolveTransformed: any) {
+  private _identifiedProcessing(content: string, resolveTransformed: any) {
     const { amClassMap, classSet } = this
     classSet.add(content)
     amClassMap.set(content, { ...resolveTransformed, pid: 'Default' })
